@@ -1,0 +1,6 @@
+credits.csv
+movies_metadata.csv
+cleaned_movies_data.csv
+
+catboost_info/
+__pycache__/
