@@ -1,4 +1,12 @@
 import streamlit as st
+
+# MUST BE AT THE VERY TOP OF THE FILE
+st.set_page_config(
+    page_title="Movie AI System",
+    page_icon="🎬",
+    layout="wide"
+)
+
 import pandas as pd
 import numpy as np
 import joblib
@@ -18,11 +26,6 @@ if "page" not in st.session_state:
 # ===========================
 if st.session_state.page == "home":
 
-    st.set_page_config(
-        page_title="Movie AI System",
-        page_icon="🎬",
-        layout="wide"
-    )
     st.markdown("""
 <style>
 
@@ -161,25 +164,6 @@ elif st.session_state.page == "recommendation":
 
             st.divider()
 
-            
-
-            # from tmdb import get_poster
-            # from recommender import (
-            #     movies,
-            #     recommend_by_director,
-            #     recommend_by_actor,
-            #     recommend_by_genre
-            # )
-
-            # ---------------------------------------------------------
-            # Page Setup & Styling
-            # ---------------------------------------------------------
-            # st.set_page_config(
-            #     page_title="Movies Recommender",
-            #     page_icon="🎬",
-            #     layout="wide"
-            # )
-
             # Load external style.css if present
             try:
                 with open("style.css", "r") as f:
@@ -303,33 +287,24 @@ elif st.session_state.page == "recommendation":
                 r_actors = set([a.strip().lower() for a in str(row.get("Actors", "")).split(",") if a.strip()])
                 r_genres = set([g.strip().lower() for g in str(row.get("genres", "")).split(",") if g.strip()])
                 
+                # 1. DIRECTOR SECTION FIX
+                if section_type == "director":
+                    for _, s_row in selected_rows.iterrows():
+                        s_dir = str(s_row.get("director", "")).strip().lower()
+                        if s_dir and s_dir == r_dir:
+                            return f"Directed by {str(s_row.get('director', '')).title()} ({s_row['title']})"
+                    return f"Directed by {str(row.get('director', '')).title()}"
+
+                # 2. ACTOR SECTION FIX
                 if section_type == "actor":
-                    all_selected_actors = set()
                     for _, s_row in selected_rows.iterrows():
                         s_actors = set([a.strip().lower() for a in str(s_row.get("Actors", "")).split(",") if a.strip()])
-                        all_selected_actors.update(s_actors)
-                        
-                    common_actors = r_actors.intersection(all_selected_actors)
-                    if common_actors:
-                        actor_name = list(common_actors)[0].title()
-                        return f"Based on {actor_name} in your favorites"
+                        common_actors = r_actors.intersection(s_actors)
+                        if common_actors:
+                            actor_name = list(common_actors)[0].title()
+                            return f"Stars {actor_name} ({s_row['title']})"
 
-                matched_movies = []
-                for _, s_row in selected_rows.iterrows():
-                    s_dir = str(s_row.get("director", "")).strip().lower()
-                    s_actors = set([a.strip().lower() for a in str(s_row.get("Actors", "")).split(",") if a.strip()])
-                    s_genres = set([g.strip().lower() for g in str(s_row.get("genres", "")).split(",") if g.strip()])
-                    
-                    dir_match = bool(s_dir and s_dir == r_dir)
-                    actor_match = bool(s_actors.intersection(r_actors))
-                    genre_match = bool(s_genres.intersection(r_genres))
-                    
-                    if dir_match or actor_match or genre_match:
-                        matched_movies.append(s_row["title"])
-
-                if len(set(matched_movies)) >= 3:
-                    return "Based on your 3 favorites"
-
+                # 3. GENRE / FALLBACK FIX
                 for _, s_row in selected_rows.iterrows():
                     s_dir = str(s_row.get("director", "")).strip().lower()
                     s_actors = set([a.strip().lower() for a in str(s_row.get("Actors", "")).split(",") if a.strip()])
@@ -338,7 +313,7 @@ elif st.session_state.page == "recommendation":
                     if (s_dir and s_dir == r_dir) or s_actors.intersection(r_actors) or s_genres.intersection(r_genres):
                         return f"Based on {s_row['title']} in your favorites"
 
-                return "Based on your 3 favorites"
+                return "Based on your favorite choices"
 
 
             def render_movie_card(movie_row, selected_movies=None, is_rec=False, section_type=None):
@@ -451,19 +426,6 @@ elif st.session_state.page == "revenue":
                 st.rerun()
 
             st.divider()
-
-                        
-            
-
-            # ==============================
-            # Page Configuration
-            # ==============================
-
-            # st.set_page_config(
-            #     page_title="Movie Revenue Prediction",
-            #     page_icon="🎬",
-            #     layout="wide"
-            # )
 
             st.markdown("""
             <style>
@@ -581,18 +543,15 @@ elif st.session_state.page == "revenue":
             </style>
             """, unsafe_allow_html=True)
 
-            
-
-
             st.title("🎬 Movie Revenue Prediction")
 
             st.write("Predict movie revenue using CatBoost")
 
             # ==============================
-            # Load Model
+            # Load Model (UPDATED RELATIVE PATH)
             # ==============================
 
-            model = joblib.load("catboost_movie_model.pkl")
+            model = joblib.load("models/catboost_movie_model.pkl")
 
             # ==============================
             # Load Dataset
@@ -953,4 +912,4 @@ elif st.session_state.page == "revenue":
                     hide_index=True
                 )
 
-                st.balloons()  
+                st.balloons()
