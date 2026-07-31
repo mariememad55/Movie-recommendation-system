@@ -551,7 +551,7 @@ elif st.session_state.page == "revenue":
             # Load Model (UPDATED RELATIVE PATH)
             # ==============================
 
-            model = joblib.load("models/catboost_movie_model.pkl")
+            model = joblib.load("catboost_movie_model.pkl")
 
             # ==============================
             # Load Dataset
