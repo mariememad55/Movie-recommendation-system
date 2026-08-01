@@ -636,38 +636,40 @@ elif st.session_state.page == "revenue":
             budget = st.sidebar.number_input(
                 "Budget",
                 min_value=0,
-                value=50000000,
+                value=65000000,
                 step=1000000
             )
 
             popularity = st.sidebar.number_input(
                 "Popularity",
                 min_value=0.0,
-                value=15.0
+                value=35.0
             )
 
             runtime = st.sidebar.number_input(
                 "Runtime",
                 min_value=30,
                 max_value=300,
-                value=120
+                value=157
             )
 
             release_year = st.sidebar.number_input(
                 "Release Year",
                 min_value=1980,
                 max_value=2035,
-                value=2026
+                value=2007
             )
 
             release_month = st.sidebar.selectbox(
                 "Release Month",
-                list(range(1,13))
+                list(range(1,13)),
+                index=2
             )
 
             adult = st.sidebar.selectbox(
                 "Adult",
-                ["False","True"]
+                ["False","True"],
+                index=0
             )
 
             status = st.sidebar.selectbox(
@@ -678,7 +680,8 @@ elif st.session_state.page == "revenue":
                     "In Production",
                     "Planned",
                     "Rumored"
-                ]
+                ],
+                index=0
             )
 
             vote_average = st.sidebar.slider(
@@ -701,61 +704,119 @@ elif st.session_state.page == "revenue":
 
             with col1:
 
+                # collection = st.selectbox(
+                #     "Movie Collection",
+                #     collections,
+                #     index=0
+                # )
                 collection = st.selectbox(
-                    "Movie Collection",
-                    collections,
-                    index=0
+                 "Movie Collection",
+                 collections,
+                 index=collections.index("No Collection")
                 )
 
+                
                 genre = st.selectbox(
-                    "Genre",
-                    genres
+               "Genre",
+                 genres,
+                 index=genres.index("Crime, Drama, Mystery, Thriller")
                 )
 
+                # language = st.selectbox(
+                #     "Original Language",
+                #     languages
+                # )
                 language = st.selectbox(
-                    "Original Language",
-                    languages
+               "Original Language",
+                languages,
+                index=languages.index("en")
                 )
 
+                # country = st.selectbox(
+                #     "Production Country",
+                #     countries
+                # )
                 country = st.selectbox(
-                    "Production Country",
-                    countries
+                "Production Country",
+                countries,
+                index=countries.index("United States of America")
                 )
 
+                # director = st.selectbox(
+                #     "Director",
+                #     directors
+                # )
                 director = st.selectbox(
-                    "Director",
-                    directors
+                "Director",
+                 directors,
+                 index=directors.index("David Fincher")    
                 )
+                
 
             with col2:
 
+                # company1 = st.selectbox(
+                #     "Production Company 1",
+                #     companies,
+                #     key="company1"
+                # )
+
+                # company2 = st.selectbox(
+                #     "Production Company 2",
+                #     companies,
+                #     key="company2"
+                # )
+
+                # actor1 = st.selectbox(
+                #     "Lead Actor",
+                #     actors,
+                #     key="actor1"
+                # )
+
+                # actor2 = st.selectbox(
+                #     "Actor 2",
+                #     actors,
+                #     key="actor2"
+                # )
+
+                # actor3 = st.selectbox(
+                #     "Actor 3",
+                #     actors,
+                #     key="actor3"
+                # )
+
                 company1 = st.selectbox(
-                    "Production Company 1",
-                    companies,
-                    key="company1"
-                )
+                "Production Company 1",
+                companies,
+                index=companies.index("Paramount Pictures"),
+                key="company1"
+            )
 
                 company2 = st.selectbox(
                     "Production Company 2",
                     companies,
+                    index=companies.index("Warner Bros. Pictures"),
                     key="company2"
                 )
 
                 actor1 = st.selectbox(
                     "Lead Actor",
                     actors,
+                    index=actors.index("Jake Gyllenhaal"),
                     key="actor1"
                 )
 
                 actor2 = st.selectbox(
                     "Actor 2",
                     actors,
+                    index=actors.index("Mark Ruffalo"),
                     key="actor2"
                 )
 
                 actor3 = st.selectbox(
                     "Actor 3",
                     actors,
+                    index=actors.index("Robert Downey Jr."),
                     key="actor3"
                 )
 
@@ -912,4 +973,4 @@ elif st.session_state.page == "revenue":
                     hide_index=True
                 )
 
-                st.balloons()
+            
